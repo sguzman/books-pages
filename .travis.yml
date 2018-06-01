@@ -21,6 +21,7 @@ install:
   - mkdir -p snapshot/
   - cd snapshot/
 script:
+  - while true; do echo heartbeat; sleep 5m; done &
   - ls ../../books/ | parallel -j 8 'cat ../../books/{} | brotli -d' | brotli > books.brotli
 after_success:
   - git add books.brotli
