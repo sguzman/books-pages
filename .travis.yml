@@ -21,7 +21,7 @@ install:
   - mkdir -p snapshot/
   - cd snapshot/
 script:
-  - ls ../../books/ | parallel -j 8 'cat {} | brotli -d' | brotli > books.brotli
+  - ls ../../books/ | parallel -j 8 'cat ../../books/{} | brotli -d' | brotli > books.brotli
 after_success:
   - git add books.brotli
   - git commit -m 'Added book snapshot'
