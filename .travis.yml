@@ -4,7 +4,7 @@ sudo: required
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y curl cmake wget
+  - sudo apt-get install -y curl cmake wget parallel
   - wget 'https://github.com/google/brotli/archive/v1.0.4.tar.gz'
   - tar zxvf v1.0.4.tar.gz
   - cd brotli-1.0.4/
@@ -21,8 +21,7 @@ install:
   - mkdir -p snapshot/
   - cd snapshot/
 script:
-  - while true; do echo 'heartbeat'; sleep 5m; done &
-  - (for file in ../../books/*.html.brotli; do (cat $file | brotli -d) done;) | brotli > books.brotli
+  - ls ../../books/ | parallel -j 8 'cat {} | brotli -d' | brotli > books.brotli
 after_success:
   - git add books.brotli
   - git commit -m 'Added book snapshot'
